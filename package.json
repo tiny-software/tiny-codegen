@@ -1,0 +1,35 @@
+{
+	"version": "1.0.0",
+	"name": "tiny-codegen",
+	"description": "Biblioteca para geração de código indepentende de linguagem",
+	"repository": {
+		"url": "https://github.com/tiny-software/tiny-codegen"
+	},
+	"main": "./dist/index.js",
+	"bin": {
+		"codegen": "./dist/index.js"
+	},
+	"scripts": {
+		"build": "yarn tsc",
+		"codegen": "yarn tsc && node dist/index.js rootDir=./examples/"
+	},
+	"license": "MIT",
+	"dependencies": {
+		"hygen": "^6.1.0",
+		"inquirer": "^8.1.2",
+		"php-parser": "^3.0.3"
+	},
+	"devDependencies": {
+		"@types/inquirer": "^7.3.3",
+		"@types/node": "^16.4.2",
+		"typescript": "^4.3.5"
+	},
+	"keywords": [
+		"codegen",
+		"code-generator",
+		"hygen",
+		"inquirer",
+		"tiny-codegen",
+		"tiny"
+	]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "examples",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "simple-codegen": "^1.0.0"
+  },
+  "scripts": {
+    "codegen-local": "cd ../ && yarn tsc && node dist/index.js rootDir=./examples"
+  }
+}
