@@ -1,5 +1,9 @@
 {
 	"version": "1.0.0",
+	"author": {
+		"name": "Tiny Software",
+		"email": "tiny@tiny.com.br"
+	},
 	"name": "tiny-codegen",
 	"description": "Biblioteca para geração de código indepentende de linguagem",
 	"repository": {
