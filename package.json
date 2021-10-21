@@ -4,7 +4,7 @@
 		"name": "Tiny Software",
 		"email": "tiny@tiny.com.br"
 	},
-	"name": "tiny-codegen",
+	"name": "tiny-codegen-teste",
 	"description": "Biblioteca para geração de código indepentende de linguagem",
 	"repository": {
 		"url": "https://github.com/tiny-software/tiny-codegen"
