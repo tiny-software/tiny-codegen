@@ -5,8 +5,9 @@ import { Step } from "../Step";
 export declare type ScriptConfigEnums = Array<Record<string, string | number | boolean> | string>;
 export declare type ScriptConfig = {
     onParseAllAnswers?: (answers: Answers, config: Record<string, unknown>) => Answers;
-    onFilesCalled?: (files: Array<string>, config: Record<string, unknown>) => Array<string>;
+    onFilesCreated?: (files: Array<string>, config: Record<string, unknown>) => Array<string>;
     enums?: ScriptConfigEnums | Record<string, ScriptConfigEnums>;
+    returnRawPhpFile?: boolean;
 } & Record<string, unknown>;
 export declare class CodeGen {
     private config;
