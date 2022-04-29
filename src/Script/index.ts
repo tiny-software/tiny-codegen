@@ -20,9 +20,9 @@ export class Script {
 	private scriptPath: string;
 	private templates: Template[];
 	private currentStep = 0;
+	private codeGen: CodeGen = null;
 
 	constructor(scriptPath: string) {
-		let codeGen = null;
 		this.config = InitialConfig.getInstance();
 		this.scriptPath = file.resolvePath(scriptPath, this.config.get("cwd"));
 		if (!this.scriptPath.endsWith(this.config.get("scriptDefaultName"))) {
@@ -30,30 +30,30 @@ export class Script {
 		}
 
 		if (existsSync(this.scriptPath)) {
-			codeGen = require(this.scriptPath);
+			this.codeGen = require(this.scriptPath);
 		}
 
-		if (!codeGen) {
+		if (!this.codeGen) {
 			throw new Error(`Script ${this.scriptPath} not found`);
 		}
 
-		if (!(codeGen instanceof CodeGen)) {
+		if (!(this.codeGen instanceof CodeGen)) {
 			throw new Error(`Script ${scriptPath} must export an instance of CodeGen`);
 		}
 
 		this.config.extend({
 			onParseAllAnswers: null,
-			...codeGen.getConfig(),
+			...this.codeGen.getConfig(),
 		} as ScriptConfig);
 
-		this.templates = codeGen.getTemplates();
-		if (this.templates.length === 0) {
+		this.templates = this.codeGen.getTemplates();
+		if (this.templates.length === 0 && this.codeGen.getConfig().setInitialTemplateAutomatically) {
 			this.templates.push(new Template(resolve(this.scriptPath, '..', TemplateResolver.templatesFolder)))
 		}
 
-		this.steps = codeGen.getSteps();
+		this.steps = this.codeGen.getSteps();
 		if (this.steps.length === 0) {
-			this.steps.push(new Step(codeGen.getPrompts()))
+			this.steps.push(new Step(this.codeGen.getPrompts()))
 		}
 
 		this.validate();
@@ -141,7 +141,7 @@ export class Script {
 	public async parseAllAnswers(answers: Answers): Promise<Answers> {
 		if (this.config.hasCallback('onParseAllAnswers')) {
 			const onParseAllAnswers = this.config.get('onParseAllAnswers');
-			const parsedAnswersCallbackAfter = await onParseAllAnswers(answers, this.config.getConfig());
+			const parsedAnswersCallbackAfter = await onParseAllAnswers(answers, this.config.getConfig(), this.codeGen);
 			return {
 				...answers,
 				...parsedAnswersCallbackAfter,
@@ -168,7 +168,7 @@ export class Script {
 
 	public async onFilesCreated(files: string[]) {
 		if (this.config.hasCallback('onFilesCreated')) {
-			await this.config.get('onFilesCreated')(files, this.config.getConfig());
+			await this.config.get('onFilesCreated')(files, this.config.getConfig(), this.codeGen);
 		}
 	}
 

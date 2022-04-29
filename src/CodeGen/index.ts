@@ -5,8 +5,9 @@ import { Step } from "../Step";
 
 export type ScriptConfigEnums = Array<Record<string, string | number | boolean> | string>;
 export type ScriptConfig = {
-	onParseAllAnswers?: (answers: Answers, config: Record<string, unknown>) => Answers;
-	onFilesCreated?: (files: Array<string>, config: Record<string, unknown>) => Array<string>;
+	setInitialTemplateAutomatically?: boolean;
+	onParseAllAnswers?: (answers: Answers, config: Record<string, unknown>, self: CodeGen) => Answers;
+	onFilesCreated?: (files: Array<string>, config: Record<string, unknown>, self: CodeGen) => Array<string>;
 	enums?: ScriptConfigEnums | Record<string, ScriptConfigEnums>;
 	returnRawPhpFile?: boolean;
 } & Record<string, unknown>;
@@ -16,8 +17,14 @@ export class CodeGen {
 	private prompts: BasePrompt[] = [];
 	private steps: Step[] = [];
 	private templates: Template[] = [];
+	private config: ScriptConfig = {};
 
-	constructor(private config: ScriptConfig = {}) { }
+	constructor(config: ScriptConfig = {}) { 
+		this.config = {
+			setInitialTemplateAutomatically: true,
+			...config,
+		}
+	}
 
 	public getConfig(): ScriptConfig {
 		return this.config;
@@ -55,7 +62,10 @@ export class CodeGen {
 	}
 
 	public setConfig(config: ScriptConfig) {
-		this.config = config;
+		this.config = {
+			...this.config,
+			...config,
+		};
 		return this;
 	}
 
