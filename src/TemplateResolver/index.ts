@@ -7,11 +7,9 @@ import { Template } from '../Template';
 export type TemplatesRunnerType = (argv: string[], templatesPath: string) => Promise<RunnerResult>;
 export class TemplateResolver {
 
-	public static templatesFolder = "templates";
-
 	constructor(private templates: Template[]) {}
 
-	private parseArgvToHygen(argv: string[], hygenAction: string) {
+	private parseArgvToHygen(argv: string[], hygenAction: string, template: Template) {
 		if (!Array.isArray(argv) || argv.length === 0) {
 			throw new Error("Os parâmetros a serem aplicados na template devem ser informados como um array de string, se você está passando um 'customAnswersParser', verifique o retorno dele.");
 		}
@@ -21,7 +19,7 @@ export class TemplateResolver {
 		// adiciona '--' antes de todas as chaves, pois o hygen espera dessa forma
 		const parsed = argv.map((arg, index) => isEven(index) ? `--${arg}` : arg);
 
-		parsed.unshift(TemplateResolver.templatesFolder);
+		parsed.unshift(template.getBasePath());
 		parsed.unshift(hygenAction);
 
 		return parsed;
@@ -34,7 +32,7 @@ export class TemplateResolver {
 			if (!template.shouldCreateFile(answers)) continue;
 			const templatesPath = template.getPath();
 			const [hygenAction] = resolve(templatesPath, '..').split(sep).reverse();
-			const argv = this.parseArgvToHygen(template.parseAnswers(answers), hygenAction);
+			const argv = this.parseArgvToHygen(template.parseAnswers(answers), hygenAction, template);
 			const result = await runner(argv, resolve(templatesPath, '..', '..'));
 
 			if (!result.success) {

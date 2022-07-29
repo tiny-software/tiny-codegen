@@ -5,7 +5,6 @@ import { resolve } from 'path';
 import { Prompt } from '../Prompt/types';
 import { Answers } from 'inquirer';
 import { InitialConfig } from '../Config/InitialConfig';
-import { TemplateResolver } from '../TemplateResolver';
 import { BasePrompt } from '../Prompt/BasePrompt';
 import { CodeGen, ScriptConfig } from '../CodeGen';
 import { Template } from '../Template';
@@ -48,7 +47,7 @@ export class Script {
 
 		this.templates = this.codeGen.getTemplates();
 		if (this.templates.length === 0 && this.codeGen.getConfig().setInitialTemplateAutomatically) {
-			this.templates.push(new Template(resolve(this.scriptPath, '..', TemplateResolver.templatesFolder)))
+			this.templates.push(new Template(resolve(this.scriptPath, '..', Template.defaultBasePath)))
 		}
 
 		this.steps = this.codeGen.getSteps();

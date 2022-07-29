@@ -2,6 +2,8 @@ import { resolve } from 'path';
 import { Answers } from 'inquirer';
 
 export class Template {
+	public static defaultBasePath = "templates";
+	private basePath = Template.defaultBasePath;
 	private path: string;
 	private answersParser = null;
 	private condition = (_: Answers) => true;
@@ -30,6 +32,15 @@ export class Template {
 		}
 
 		this.answersParser = answersParser;
+	}
+
+	public setBasePath(basePath: string) {
+		this.basePath = basePath;
+		return this;
+	}
+
+	public getBasePath(): string {
+		return this.basePath;
 	}
 
 	public getPath() {
