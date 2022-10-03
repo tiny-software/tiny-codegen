@@ -52,6 +52,12 @@ exports.parse = {
             else if (isPath(argParts[0])) {
                 result.config["scriptPath"] = arg;
             }
+            else if (typeof argParts[0] === 'string' && argParts[0].startsWith("--")) {
+                const flag = argParts[0].slice(2);
+                if (flag) {
+                    result.answers[flag] = true;
+                }
+            }
         });
         if (configPath) {
             const _a = yield file_helpers_1.file.importJsFile(configPath), { success } = _a, config = __rest(_a, ["success"]);

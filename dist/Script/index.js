@@ -14,7 +14,6 @@ const fs_1 = require("fs");
 const parsing_helpers_1 = require("../helpers/parsing.helpers");
 const path_1 = require("path");
 const InitialConfig_1 = require("../Config/InitialConfig");
-const TemplateResolver_1 = require("../TemplateResolver");
 const CodeGen_1 = require("../CodeGen");
 const Template_1 = require("../Template");
 const file_helpers_1 = require("../helpers/file.helpers");
@@ -53,7 +52,7 @@ class Script {
         this.config.extend(Object.assign({ onParseAllAnswers: null }, this.codeGen.getConfig()));
         this.templates = this.codeGen.getTemplates();
         if (this.templates.length === 0 && this.codeGen.getConfig().setInitialTemplateAutomatically) {
-            this.templates.push(new Template_1.Template(path_1.resolve(this.scriptPath, '..', TemplateResolver_1.TemplateResolver.templatesFolder)));
+            this.templates.push(new Template_1.Template(path_1.resolve(this.scriptPath, '..', Template_1.Template.defaultBasePath)));
         }
         this.steps = this.codeGen.getSteps();
         if (this.steps.length === 0) {

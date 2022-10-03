@@ -23,14 +23,14 @@ class TemplateResolver {
     constructor(templates) {
         this.templates = templates;
     }
-    parseArgvToHygen(argv, hygenAction) {
+    parseArgvToHygen(argv, hygenAction, template) {
         if (!Array.isArray(argv) || argv.length === 0) {
             throw new Error("Os parâmetros a serem aplicados na template devem ser informados como um array de string, se você está passando um 'customAnswersParser', verifique o retorno dele.");
         }
         const isEven = number => number % 2 === 0;
         // adiciona '--' antes de todas as chaves, pois o hygen espera dessa forma
         const parsed = argv.map((arg, index) => isEven(index) ? `--${arg}` : arg);
-        parsed.unshift(TemplateResolver.templatesFolder);
+        parsed.unshift(template.getBasePath());
         parsed.unshift(hygenAction);
         return parsed;
     }
@@ -45,7 +45,7 @@ class TemplateResolver {
                         continue;
                     const templatesPath = template.getPath();
                     const [hygenAction] = path_1.resolve(templatesPath, '..').split(path_2.sep).reverse();
-                    const argv = this.parseArgvToHygen(template.parseAnswers(answers), hygenAction);
+                    const argv = this.parseArgvToHygen(template.parseAnswers(answers), hygenAction, template);
                     const result = yield runner(argv, path_1.resolve(templatesPath, '..', '..'));
                     if (!result.success) {
                         throw new Error(`Ocorreu um erro ao gerar as templates da pasta ${templatesPath}, verifique se o seu script está gerando todas as variáveis que a template precisa`);
@@ -67,5 +67,4 @@ class TemplateResolver {
     }
 }
 exports.TemplateResolver = TemplateResolver;
-TemplateResolver.templatesFolder = "templates";
 //# sourceMappingURL=index.js.map

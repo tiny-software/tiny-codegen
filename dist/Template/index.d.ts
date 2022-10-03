@@ -1,5 +1,7 @@
 import { Answers } from 'inquirer';
 export declare class Template {
+    static defaultBasePath: string;
+    private basePath;
     private path;
     private answersParser;
     private condition;
@@ -7,6 +9,8 @@ export declare class Template {
      * @param {String} path - The path of the template relative to the project root
      * */
     constructor(...path: string[]);
+    setBasePath(basePath: string): this;
+    getBasePath(): string;
     getPath(): string;
     /**
      * Esse método define uma callback que irá ser chamada antes da template receber as respostas.

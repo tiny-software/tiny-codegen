@@ -29,6 +29,11 @@ export const parse = {
 				result.config[key] = value;
 			} else if (isPath(argParts[0])) {
 				result.config["scriptPath"] = arg;
+			} else if (typeof argParts[0] === 'string' && argParts[0].startsWith("--")) {
+				const flag = argParts[0].slice(2);
+				if (flag) {
+					result.answers[flag] = true;
+				}
 			}
 		});
 

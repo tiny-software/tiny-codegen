@@ -7,6 +7,7 @@ class Template {
      * @param {String} path - The path of the template relative to the project root
      * */
     constructor(...path) {
+        this.basePath = Template.defaultBasePath;
         this.answersParser = null;
         this.condition = (_) => true;
         this.path = path_1.resolve(...path);
@@ -25,6 +26,13 @@ class Template {
             }, []);
         };
         this.answersParser = answersParser;
+    }
+    setBasePath(basePath) {
+        this.basePath = basePath;
+        return this;
+    }
+    getBasePath() {
+        return this.basePath;
     }
     getPath() {
         return this.path;
@@ -58,4 +66,5 @@ class Template {
     }
 }
 exports.Template = Template;
+Template.defaultBasePath = "templates";
 //# sourceMappingURL=index.js.map
